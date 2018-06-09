@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ShoppingList</title>
+    <title>Shopping List</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,6 +10,12 @@
   </head>
 
   <body>
+    <% if !flash.empty? %>
+      <% flash.each do |name, msg| -%>
+          <h3><%= content_tag :div, msg, class: name %></h3>
+      <% end -%>
+      <hr>
+    <% end %>
     <%= yield %>
   </body>
 </html>

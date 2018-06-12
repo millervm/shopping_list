@@ -21,7 +21,23 @@ class UsersController < ApplicationController
     end
     
     def show
-        @user = User.find_by(params[:id])
+        @user = User.find_by(id: params[:id])
+        #if @user && logged_in?
+        if @user && logged_in?
+            if @user == current_user
+                render :show
+            else
+                flash[:notice] = "You cannot access that page."
+                redirect_to user_page(current_user)
+            end
+        elsif !@user && logged_in?
+            flash[:notice] = "That's not a valid page."
+            redirect_to user_path(current_user)
+        else
+            flash[:notice] = "You must be logged in to access user details."
+            redirect_to root_path
+            #redirect_to '/login'
+        end
     end
     
     def edit
@@ -35,5 +51,5 @@ class UsersController < ApplicationController
     def user_params
         params.require(:user).permit(:name, :password)
     end
-
+    
 end

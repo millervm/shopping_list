@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_03_203907) do
+ActiveRecord::Schema.define(version: 2018_06_16_194858) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
     t.string "description"
-    t.boolean "complete"
-    t.boolean "urgent"
+    t.boolean "complete", default: false
+    t.boolean "urgent", default: false
     t.integer "list_id"
     t.integer "user_id"
     t.datetime "created_at", null: false

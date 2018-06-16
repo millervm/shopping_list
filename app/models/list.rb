@@ -2,5 +2,6 @@ class List < ApplicationRecord
     belongs_to :user
     has_many :items
     
-    #validations = must have name
+    validates :name, presence: true, message: "List must have a name."
+    validates :name, uniqueness: true, scope: user, message: "You cannot have two lists with the same name."
 end

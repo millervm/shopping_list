@@ -16,12 +16,7 @@ class UsersController < ApplicationController
                 session[:user_id] = @user.id
                 redirect_to user_path(@user)
             else
-                #@user.errors.full_messages.each do |message|
-                    #flash[:notice] =[]
-                    #flash[:notice] << message
-                #end
-                flash[:notice] = @user.errors.messages.values.flatten
-                #flash[:notice] = @user.errors.messages.values.flatten.collect {|message| message + "<br>"}
+                flash[:notice] = @user.errors.messages.values.flatten.join("\n")
                 redirect_to new_user_path
             end
         else
@@ -31,13 +26,12 @@ class UsersController < ApplicationController
     
     def show
         @user = User.find_by(id: params[:id])
-        #if @user && logged_in?
         if @user && logged_in?
             if @user == current_user
                 render :show
             else
                 flash[:notice] = "You cannot access that page."
-                redirect_to user_page(current_user)
+                redirect_to user_path(current_user)
             end
         elsif !@user && logged_in?
             flash[:notice] = "That's not a valid page."

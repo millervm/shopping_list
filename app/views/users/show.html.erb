@@ -1,6 +1,16 @@
 <h1><%= @user.name %></h1>
 
-Lists
+<h3>Lists</h3>
+<ul>
+    <% @user.lists.each do |list| %>
+        <li><%= link_to list.name, list_path(list) %><br>
+            <%= list.items.count %> items
+        </li>
+    <% end %>
+</ul>
 
+<br></br>
+
+<%= link_to "Create New List", new_user_list_path(current_user) %>
 <br></br>
 <%= link_to "Log Out", '/logout' %>

@@ -1,4 +1,5 @@
 class ListsController < ApplicationController
+    #add before_action verify_user
     
     def new
         if logged_in?
@@ -40,14 +41,19 @@ class ListsController < ApplicationController
     
     def show
         @list = List.find_by(id: params[:id])
-        if @list
-          if @list.user != current_user
-            flash[:notice] = "You do not have access to that page."
-            redirect_to user_lists_path(current_user)
-          end
+        if logged_in?
+            if @list
+                if @list.user != current_user
+                    flash[:notice] = "You do not have access to that page."
+                    redirect_to user_lists_path(current_user)
+                end
+            else
+                flash[:notice] = "That is not a valid page."
+                redirect_to user_lists_path(current_user)
+            end
         else
-            flash[:notice] = "That is not a valid page."
-            redirect_to user_lists_path(current_user)
+            flash[:notice] = "You must be logged in to create lists."
+            redirect_to root_path
         end
     end
     
@@ -105,6 +111,26 @@ class ListsController < ApplicationController
     end
     
     def destroy
+    end
+    
+    def show_complete
+        @list = List.find_by(id: params[:id])
+        if logged_in?
+            if @list
+                if @list.user != current_user
+                    flash[:notice] = "You do not have access to that page."
+                    redirect_to user_lists_path(current_user)
+                else
+                    render :show
+                end
+            else
+                flash[:notice] = "That is not a valid page."
+                redirect_to user_lists_path(current_user)
+            end
+        else
+            flash[:notice] = "You must be logged in to create lists."
+            redirect_to root_path
+        end
     end
     
     private

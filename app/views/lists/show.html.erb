@@ -1,1 +1,27 @@
-<h1>Show List Page</h1>
+<h1><%= @list.name %></h1>
+
+<ul>
+    <% @list.incomplete_items do |item| %>
+        <li>
+            <%= @item.name %>
+            <%= @item.description %>
+        </li>
+    <% end %>
+</ul>
+
+^^ add links to edit or delete each item
+<br></br>
+<% if current_page?(action: 'complete') %>
+    <h4>Completed Items:</h4>
+    <ul>
+        <% @list.complete_items do |item| %>
+        <li>
+            <%= @item.name %>
+            <%= @item.description %>
+        </li>
+        <% end %>
+    </ul>
+<% else %>
+    <%= link_to "Show Complete Items", "/lists/#{@list.id}/show-complete" %>
+<% end %>
+

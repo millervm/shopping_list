@@ -1,5 +1,6 @@
 class ListsController < ApplicationController
     #add before_action verify_user
+    #before_action set_list
     
     def new
         if logged_in?
@@ -61,7 +62,7 @@ class ListsController < ApplicationController
         if logged_in?
             if params[:user_id]
                 user = User.find_by(id: params[:user_id])
-                if !user.nil? && user == current_user
+                if user && user == current_user
                     @lists = user.lists
                 else
                     flash[:notice] = "You cannot access that page."
@@ -128,15 +129,47 @@ class ListsController < ApplicationController
                 redirect_to user_lists_path(current_user)
             end
         else
-            flash[:notice] = "You must be logged in to create lists."
+            flash[:notice] = "You must be logged in to view your lists."
             redirect_to root_path
         end
     end
     
+    # def show_urgent
+    #     user = User.find_by(id: params[:user_id])
+    #     if user
+    #         @lists = current_user.lists
+    #         render :index
+    #     else
+    #         flash[:notice] = "Not a valid user."
+    #         redirect_to user_lists_path(current_user)
+    #     end
+    # end
+    
+    def show_urgent
+        if logged_in?
+            if params[:user_id]
+                user = User.find_by(id: params[:user_id])
+                if user && user == current_user
+                    @lists = user.lists
+                    render :index
+                else
+                    flash[:notice] = "You cannot access that page."
+                    redirect_to user_lists_path(current_user)
+                end
+            else
+                @lists = current_user.lists
+            end
+        else
+            flash[:notice] = "You must be logged in to view lists."
+            redirect_to root_path
+        end
+    end
+  
+    
     private
     
-    def list_params
-        params.require(:list).permit(:name, :user_id)
-    end
+        def list_params
+            params.require(:list).permit(:name, :user_id)
+        end
 
 end

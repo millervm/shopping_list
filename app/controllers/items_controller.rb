@@ -47,12 +47,65 @@ class ItemsController < ApplicationController
     end
     
     def show
+        @item = Item.find_by(id: params[:id])
+        if logged_in?
+            if @item
+                if @item.user != current_user
+                    flash[:notice] = "You do not have access to that page."
+                    redirect_to user_lists_path(current_user)
+                end
+            else
+                flash[:notice] = "That is not a valid page."
+                redirect_to user_lists_path(current_user)
+            end
+        else
+            flash[:notice] = "You must be logged in to create lists."
+            redirect_to root_path
+        end
     end
     
     def edit
+        @item = Item.find_by(id: params[:id])
+        if logged_in?
+            if @item
+                if @item.user != current_user
+                    flash[:notice] = "You can only edit your own list items."
+                    redirect_to user_lists_path(current_user)
+                end
+            else
+                flash[:notice] = "That is not a valid item."
+                redirect_to user_lists_path(current_user)
+            end
+        else
+            flash[:notice] = "You must be logged in to edit your list items."
+            redirect_to root_path
+        end
     end
     
     def update
+        @item = Item.find_by(id: params[:id])
+        if logged_in?
+            if @item
+                if @item.user == current_user
+                    @item.update(item_params)
+                    if @item.save
+                        redirect_to item_path(@item)
+                    else
+                        flash[:notice] = @item.errors.messages.values.flatten.join("\n")
+                        redirect_to edit_item_path(@item)
+                    end
+                else
+                    flash[:notice] = "You do not have access to that page."
+                    redirect_to user_lists_path(current_user)
+                end
+            else
+                flash[:notice] = "That is not a valid item."
+                redirect_to user_lists_path(current_user)
+            end
+        else
+            flash[:notice] = "You must be logged in to edit your lists."
+            redirect_to root_path
+        end
     end
     
     def destroy

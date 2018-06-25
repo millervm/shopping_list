@@ -1,1 +1,14 @@
-<h1>Show Item Page</h1>
+<h1><%= @item.name %></h1>
+
+<h3><%= "URGENT" if @item.urgent %></h3>
+
+<h4>List: <%= @item.list.name %></h4>
+
+<%= @item.description %>
+
+<%= button_to "Mark as Completed", "/items/#{@item.id}/mark-complete" %>
+<br></br>
+<%= link_to "Edit Item", edit_item_path(@item) %>
+<br></br>
+<%= link_to "Delete Item", "/items/#{@item.id}", method: :delete %>
+

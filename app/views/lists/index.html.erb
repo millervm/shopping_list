@@ -1,1 +1,29 @@
-<h1>User's List Index</h1>
+<h1><%= current_user.name %>'s Lists</h1>
+
+<ul>
+    <% @lists.each do |list| %>
+        <li><%= link_to list.name, list_path(list) %> &nbsp;&nbsp;&nbsp; (<%= pluralize(list.incomplete_items.count, 'item') %> pending)</li>
+        </li>
+    <% end %>
+</ul>
+
+<br></br>
+<% if current_page?(action: 'show_urgent') %>
+    <h3>Urgent Items:</h3>
+    <% @lists.each do |list| %>
+        <% if !list.urgent_items.empty? %>
+            <h4><%= list.name %></h4>
+            <ul>
+                <% list.urgent_items.each do |item| %>
+                <li><%= link_to item.name, item_path(item) %></li>
+                <% end %>
+            </ul>
+        <% end %>
+    <% end %>
+    <%= link_to "Hide Urgent Items", user_lists_path(current_user) %>
+<% else %>
+    <%= link_to "Show Urgent Items", "/users/#{current_user.id}/lists/show-urgent" %>
+<% end %>
+
+<br></br>
+<%= link_to "Create New List", new_user_list_path(current_user) %>

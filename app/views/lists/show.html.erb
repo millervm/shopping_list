@@ -1,27 +1,37 @@
 <h1><%= @list.name %></h1>
 
+<% if !@list.incomplete_items.empty? %>
 <ul>
-    <% @list.incomplete_items do |item| %>
+    <% @list.incomplete_items.each do |item| %>
         <li>
-            <%= @item.name %>
-            <%= @item.description %>
+            <%= link_to item.name, item_path(item) %>
+            <%# add indicator for urgent %>
         </li>
     <% end %>
 </ul>
-
-^^ add links to edit or delete each item
-<br></br>
-<% if current_page?(action: 'complete') %>
-    <h4>Completed Items:</h4>
-    <ul>
-        <% @list.complete_items do |item| %>
-        <li>
-            <%= @item.name %>
-            <%= @item.description %>
-        </li>
-        <% end %>
-    </ul>
 <% else %>
-    <%= link_to "Show Complete Items", "/lists/#{@list.id}/show-complete" %>
+No pending items.
+<% end %>
+
+<br></br>
+<%= link_to "Add New Item", new_list_item_path(@list) %>
+<br></br>
+<% if current_page?(action: 'show_complete') %>
+    <h4>Completed Items:</h4>
+    <% if !@list.complete_items.empty? %>
+        <ul>
+            <% @list.complete_items.each do |item| %>
+            <li>
+                <%= link_to item.name, item_path(item) %>
+            </li>
+            <% end %>
+        </ul>
+    <% else %>
+        (None)
+    <% end %>
+    <br></br>
+    <%= link_to "Hide Completed Items", list_path(@list) %>
+<% else %>
+    <%= link_to "Show Completed Items", "/lists/#{@list.id}/show-complete" %>
 <% end %>
 

@@ -7,19 +7,19 @@ class List < ApplicationRecord
     
     def complete_items
         self.items.select do |item|
-            iten if item.complete
+            item.complete
         end
     end
     
     def incomplete_items
         self.items.select do |item|
-            item if !item.complete
+            !item.complete
         end
     end
     
     def urgent_items
         self.incomplete_items.select do |item|
-            item if item.urgent
+            item.urgent
         end
     end
     

@@ -6,19 +6,19 @@ class List < ApplicationRecord
     validates :user_id, uniqueness: {scope: :name, message: "You cannot have two lists with the same name."}
     
     def complete_items
-        self.items.collect do |item|
+        self.items.select do |item|
             iten if item.complete
         end
     end
     
     def incomplete_items
-        self.items.collect do |item|
+        self.items.select do |item|
             item if !item.complete
         end
     end
     
     def urgent_items
-        self.incomplete_items.collect do |item|
+        self.incomplete_items.select do |item|
             item if item.urgent
         end
     end

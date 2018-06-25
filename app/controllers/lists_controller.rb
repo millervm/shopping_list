@@ -80,8 +80,13 @@ class ListsController < ApplicationController
     def edit
         @list = List.find_by(id: params[:id])
         if logged_in?
-            if @list.user != current_user
-                flash[:notice] = "You can only edit your own lists."
+            if @list
+                if @list.user != current_user
+                    flash[:notice] = "You can only edit your own lists."
+                    redirect_to user_lists_path(current_user)
+                end
+            else
+                flash[:notice] = "That is not a valid list."
                 redirect_to user_lists_path(current_user)
             end
         else
@@ -133,17 +138,6 @@ class ListsController < ApplicationController
             redirect_to root_path
         end
     end
-    
-    # def show_urgent
-    #     user = User.find_by(id: params[:user_id])
-    #     if user
-    #         @lists = current_user.lists
-    #         render :index
-    #     else
-    #         flash[:notice] = "Not a valid user."
-    #         redirect_to user_lists_path(current_user)
-    #     end
-    # end
     
     def show_urgent
         if logged_in?

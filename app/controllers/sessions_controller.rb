@@ -1,12 +1,7 @@
 class SessionsController < ApplicationController
+    skip_before_action :require_login, only: [:new, :create]
     
     def new
-        if logged_in?
-            flash[:notice] = "You're already logged in."
-            redirect_to user_path(current_user)
-        else
-            render :new
-        end
     end
 
     def create

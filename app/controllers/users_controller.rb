@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+    skip_before_action :require_login, only: [:new, :create]
     
     def new
         if logged_in?
@@ -10,7 +11,7 @@ class UsersController < ApplicationController
     end
     
     def create
-        if !logged_in?
+        #if !logged_in?
             @user = User.new(user_params)
             if @user.save
                 session[:user_id] = @user.id
@@ -19,27 +20,26 @@ class UsersController < ApplicationController
                 flash[:notice] = @user.errors.messages.values.flatten.join("\n")
                 redirect_to new_user_path
             end
-        else
-            redirect_to user_path(current_user)
-        end
+        # else
+        #     redirect_to user_path(current_user)
+        # end
     end
     
     def show
         @user = User.find_by(id: params[:id])
-        if @user && logged_in?
+        if @user
             if @user == current_user
                 render :show
             else
                 flash[:notice] = "You cannot access that page."
                 redirect_to user_path(current_user)
             end
-        elsif !@user && logged_in?
+        else
             flash[:notice] = "That's not a valid page."
             redirect_to user_path(current_user)
-        else
-            flash[:notice] = "You must be logged in to access user details."
-            redirect_to root_path
-            #redirect_to '/login'
+        # else
+        #     flash[:notice] = "You must be logged in to access user details."
+        #     redirect_to root_path
         end
     end
     

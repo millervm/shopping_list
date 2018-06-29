@@ -11,8 +11,7 @@ class UsersController < ApplicationController
     end
     
     def create
-        #if !logged_in?
-            @user = User.new(user_params)
+        @user = User.new(user_params)
             if @user.save
                 session[:user_id] = @user.id
                 redirect_to user_path(@user)
@@ -28,18 +27,13 @@ class UsersController < ApplicationController
     def show
         @user = User.find_by(id: params[:id])
         if @user
-            if @user == current_user
-                render :show
-            else
-                flash[:notice] = "You cannot access that page."
+            if @user != current_user
+                flash[:notice] = "You do not have access to that page."
                 redirect_to user_path(current_user)
             end
         else
-            flash[:notice] = "That's not a valid page."
+            flash[:notice] = "That is not a valid page."
             redirect_to user_path(current_user)
-        # else
-        #     flash[:notice] = "You must be logged in to access user details."
-        #     redirect_to root_path
         end
     end
     

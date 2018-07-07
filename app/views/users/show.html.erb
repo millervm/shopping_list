@@ -1,16 +1,19 @@
 <h1><%= @user.name %></h1>
 
-<h3>Lists</h3>
-<ul>
-    <% @user.lists.each do |list| %>
-        <li><%= link_to list.name, list_path(list) %><br>
-            <%= list.items.count %> items
-        </li>
-    <% end %>
-</ul>
-
+<br>
+<strong><%= link_to pluralize(@user.lists.count, 'List'), user_lists_path(@user) %></strong><br>
 <br></br>
-
-<%= link_to "Create New List", new_user_list_path(current_user) %>
+(make urgent list optional like on other pages? - secondary view?)<br>
+<h3><%= pluralize(@user.urgent_list_items.values.flatten.count, 'Urgent Item')%></h3>
+<% @user.urgent_list_items.each do |list, items| %>
+    <strong><%= list.name %></strong>
+    <ul>
+        <% items.each do |item| %>
+        <li><%= link_to item.name, item_path(item) %></li>
+        <% end %>
+    </ul>
+<% end %>
+<br></br>
+link to edit account details?
 <br></br>
 <%= link_to "Log Out", '/logout' %>

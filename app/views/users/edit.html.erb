@@ -1,1 +1,25 @@
-<h1>Edit User Form</h1>
+<h1>Edit Account Details</h1>
+<br>
+<h4>Change Username</h4>
+<%= form_for @user do |f| %>
+    <%= f.label "New Username" %>
+    <%= f.text_field :name %>
+    <br></br>
+    <%= f.label "Current Password (required)" %>
+    <%= f.password_field :current_password %>
+    <br></br>
+    <%= f.submit "Update Username" %>
+<% end %>
+<br></br>
+<h4>Change Password</h4>
+<%= form_for @user do |f| %>
+    <%= f.label "New Password" %>
+    <%= f.password_field :password %>
+    <br></br>
+    <%= f.label "Current Password (required)" %>
+    <%= f.password_field :current_password %>
+    <br></br>
+    <%= f.submit "Update Password" %>
+<% end %>
+<br></br>
+<%= link_to "Back to My Account", user_path(@user) %>

@@ -1,3 +1,7 @@
 <h1>Edit List</h1>
 
 <%= render 'form' %>
+<br></br>
+<%= link_to "Delete List", "/lists/#{@list.id}", method: :delete %>
+<br></br>
+<%= link_to "Back to List", list_path(@list) %>

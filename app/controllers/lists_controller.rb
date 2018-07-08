@@ -1,5 +1,5 @@
 class ListsController < ApplicationController
-    #before_action set_list
+    before_action :set_list, except: [:new, :create, :index, :show_urgent]
     
     def new
         if params[:user_id]
@@ -9,7 +9,6 @@ class ListsController < ApplicationController
                 @list = List.new(user_id: user.id)
             end
         else
-            #add flash notice? (not valid page)?
             @list = List.new(user_id: current_user.id)
         end
     end
@@ -26,7 +25,6 @@ class ListsController < ApplicationController
     end
     
     def show
-        @list = List.find_by(id: params[:id])
         if @list
             verify_user(@list.user)
         else
@@ -46,13 +44,11 @@ class ListsController < ApplicationController
                 redirect_to user_lists_path(current_user)
             end
         else
-            #add flash notice?
             @lists = current_user.lists
         end
     end
     
     def edit
-        @list = List.find_by(id: params[:id])
         if @list
             verify_user(@list.user)
         else
@@ -62,22 +58,32 @@ class ListsController < ApplicationController
     end
     
     def update
-        @list = List.find_by(id: params[:id])
-        verify_user(@list.user)
-        @list.update(list_params)
-        if @list.save
-            redirect_to list_path(@list)
+        if @list
+            verify_user(@list.user)
+            @list.update(list_params)
+            if @list.save
+                redirect_to list_path(@list)
+            else
+                flash[:notice] = @list.errors.messages.values.flatten.join("\n")
+                redirect_to edit_list_path(@list)
+            end
         else
-            flash[:notice] = @list.errors.messages.values.flatten.join("\n")
-            redirect_to edit_list_path(@list)
+            redirect_to user_lists_path(current_user)
         end
     end
     
     def destroy
+        if @list
+            verify_user(@list.user)
+            @list.items.each {|item| item.destroy}
+            @list.destroy
+            redirect_to user_lists_path(current_user)
+        else
+            flash[:notice] = "That is not a valid page."
+        end
     end
     
     def show_complete
-        @list = List.find_by(id: params[:id])
         if @list
             verify_user(@list.user)
             render :show
@@ -99,7 +105,6 @@ class ListsController < ApplicationController
                 redirect_to user_lists_path(current_user)
             end
         else
-            #add flash notice?
             @lists = current_user.lists
         end
     end
@@ -108,6 +113,10 @@ class ListsController < ApplicationController
     
         def list_params
             params.require(:list).permit(:name, :user_id)
+        end
+        
+        def set_list
+            @list = List.find_by(id: params[:id])
         end
         
 end

@@ -3,10 +3,15 @@ class User < ApplicationRecord
     has_many :lists
     has_many :items, through: :lists
     
-    validates :name, presence: {message: "You must enter a name."}
-    validates :name, length: {maximum: 50, message: "Your name must have less than 50 characters."}
-    validates :password, presence: {message: "You must enter a password."}
-    validates :password, length: {in: 6..50, message: "Your password must have 6-40 characters."}
+    before_save {self.name = name.downcase}
+    
+    validates :name, uniqueness: {case_sensitive: false, message: "That username is already in use. Please chooose another."},
+                    presence: {message: "You must enter a name."},
+                    length: {maximum: 50, message: "Your name must have less than 50 characters."}
+    validates :password, presence: {message: "You must enter a password."},
+                        length: {in: 6..50, message: "Your password must have 6-40 characters."},
+                        if: :password
+    
     
     def urgent_list_items
         urgent = {}

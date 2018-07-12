@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-    #before_action set_item
+    before_action :set_item, except: [:new, :create]
     
     def new
         if params[:list_id]
@@ -18,7 +18,7 @@ class ItemsController < ApplicationController
     end
     
     def create
-        @item = Item.new(item_params
+        @item = Item.new(item_params)
         verify_user(@item.user)
         if @item.save
             redirect_to item_path(@item)
@@ -29,7 +29,6 @@ class ItemsController < ApplicationController
     end
     
     def show
-        @item = Item.find_by(id: params[:id])
         if @item
             verify_user(@item.user)
         else
@@ -39,7 +38,6 @@ class ItemsController < ApplicationController
     end
     
     def edit
-        @item = Item.find_by(id: params[:id])
         if @item
             verify_user(@item.user)
         else
@@ -49,7 +47,6 @@ class ItemsController < ApplicationController
     end
     
     def update
-        @item = Item.find_by(id: params[:id])
         if @item
             verify_user(@item.user)
             @item.update(item_params)
@@ -66,12 +63,24 @@ class ItemsController < ApplicationController
     end
     
     def destroy
+        if @item
+            list = @item.list
+            verify_user(@item.user)
+            @item.destroy
+            redirect_to list_path(list)
+        else
+            flash[:notice] = "That is not a valid page."
+        end
     end
     
     private
     
         def item_params
             params.require(:item).permit(:name, :description, :urgent, :complete, :list_id, :user_id)
+        end
+        
+        def set_item
+            @item = Item.find_by(id: params[:id])
         end
     
 end

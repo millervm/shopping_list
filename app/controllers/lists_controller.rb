@@ -20,7 +20,7 @@ class ListsController < ApplicationController
             redirect_to list_path(@list)
         else
             flash[:notice] = @list.errors.messages.values.flatten.join("\n")
-            redirect_to new_user_list_path(current_user)
+            render :new
         end
     end
     
@@ -65,7 +65,7 @@ class ListsController < ApplicationController
                 redirect_to list_path(@list)
             else
                 flash[:notice] = @list.errors.messages.values.flatten.join("\n")
-                redirect_to edit_list_path(@list)
+                render :edit
             end
         else
             redirect_to user_lists_path(current_user)

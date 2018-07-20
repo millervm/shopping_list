@@ -24,7 +24,7 @@ class ItemsController < ApplicationController
             redirect_to item_path(@item)
         else
             flash[:notice] = @item.errors.messages.values.flatten.join("\n")
-            redirect_to new_list_item_path(@item.list)
+            render :new
         end
     end
     
@@ -54,7 +54,7 @@ class ItemsController < ApplicationController
                 redirect_to item_path(@item)
             else
                 flash[:notice] = @item.errors.messages.values.flatten.join("\n")
-                redirect_to edit_item_path(@item)
+                render :edit
             end
         else
             flash[:notice] = "That is not a valid item."

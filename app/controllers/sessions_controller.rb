@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     def create
         if params.values.include?("")
             flash[:notice] = "Please enter both fields."
-            redirect_to '/login'
+            render :new
         else
             @user = User.find_by(name: params[:username])
             if @user && @user.authenticate(params[:password])
@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
                 redirect_to user_path(@user)
             else
                 flash[:notice] = "Incorrect login details. Please try again or sign up for an account."
-                redirect_to '/login'
+                render :new
             end
         end
     end

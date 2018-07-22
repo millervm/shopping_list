@@ -1,7 +1,7 @@
 Rails.application.routes.draw do                                             
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
-  resources :users, only: [:new, :create, :show, :edit] do
+  resources :users, only: [:new, :create, :show, :edit, :update] do
     resources :lists, only: [:new, :index, :edit]
   end
   
@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   
   get '/lists/:id/show-complete', to: 'lists#show_complete'
   get '/users/:user_id/lists/show-urgent', to: 'lists#show_urgent'
+  get '/users/:id/show-urgent', to: 'users#show_urgent'
   
   root 'application#home'
   

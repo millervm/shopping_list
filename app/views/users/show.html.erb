@@ -1,19 +1,24 @@
 <h1><%= @user.name %></h1>
 
 <br>
-<strong><%= link_to pluralize(@user.lists.count, 'List'), user_lists_path(@user) %></strong><br>
-<br></br>
-(make urgent list optional like on other pages? - secondary view?)<br>
-<h3><%= pluralize(@user.urgent_list_items.values.flatten.count, 'Urgent Item')%></h3>
-<% @user.urgent_list_items.each do |list, items| %>
-    <strong><%= list.name %></strong>
-    <ul>
-        <% items.each do |item| %>
-        <li><%= link_to item.name, item_path(item) %></li>
-        <% end %>
-    </ul>
+<strong><%= pluralize(@user.lists.count, 'List') %> <%= link_to "(View)", user_lists_path(@user) %></strong>
+<br>
+<br>
+<% if current_page?(action: 'show_urgent') %>
+    <strong><%= pluralize(@user.urgent_list_items.values.flatten.count, 'Urgent Item') %> <%= link_to "(Hide)", user_path(current_user) %></strong>
+    <br></br>
+    <% @user.urgent_list_items.each do |list, items| %>
+        <strong><%= list.name %></strong>
+        <ul>
+            <% items.each do |item| %>
+            <li><%= link_to item.name, item_path(item) %></li>
+            <% end %>
+        </ul>
+    <% end %>
+<% else %>
+    <strong><%= pluralize(@user.urgent_list_items.values.flatten.count, 'Urgent Item') %> <%= link_to "(Show)", "/users/#{current_user.id}/show-urgent" %></strong>
 <% end %>
 <br></br>
-link to edit account details?
+<%= link_to "Edit Account Details", edit_user_path(@user) %>
 <br></br>
 <%= link_to "Log Out", '/logout' %>

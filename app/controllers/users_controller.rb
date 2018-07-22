@@ -63,6 +63,17 @@ class UsersController < ApplicationController
         end
     end
     
+    def show_urgent
+        @user = User.find_by(id: params[:id])
+        if @user
+            verify_user(@user)
+            render :show
+        else
+            flash[:notice] = "That is not a valid page."
+            redirect_to user_path(current_user)
+        end
+    end
+    
     private
     
     def user_params

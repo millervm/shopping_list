@@ -5,17 +5,23 @@ class SessionsController < ApplicationController
     end
 
     def create
-        if params.values.include?("")
-            flash[:notice] = "Please enter both fields."
-            render :new
+        if request.env["omniauth.auth"]
+            @user = User.from_omniauth(request.env["omniauth.auth"])
+            session[:user_id] = @user.id
+            redirect_to user_path(@user)
         else
-            @user = User.find_by(name: params[:username])
-            if @user && @user.authenticate(params[:password])
-                session[:user_id] = @user.id
-                redirect_to user_path(@user)
-            else
-                flash[:notice] = "Incorrect login details. Please try again or sign up for an account."
+            if params.values.include?("")
+                flash[:notice] = "Please enter both fields."
                 render :new
+            else
+                @user = User.find_by(name: params[:username])
+                if @user && @user.authenticate(params[:password])
+                    session[:user_id] = @user.id
+                    redirect_to user_path(@user)
+                else
+                    flash[:notice] = "Incorrect login details. Please try again or sign up for an account."
+                    render :new
+                end
             end
         end
     end

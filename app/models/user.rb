@@ -21,4 +21,13 @@ class User < ApplicationRecord
         urgent
     end
     
+    def self.from_omniauth(auth)
+        user = find_or_create_by(uid: auth.uid, provider: auth.provider)
+          user.provider = auth.provider
+          user.uid = auth.uid
+          user.name = auth.info.name
+          user.save!
+        user
+    end
+    
 end

@@ -1,11 +1,15 @@
 <h1>Login</h1>
 
-<%= form_tag sessions_path do %>
-    <%= label_tag "Username" %>
-    <%= text_field_tag :username %>
-    <br></br>
-    <%= label_tag "Password"%>
-    <%= password_field_tag :password %>
-    <br></br>
-    <%= submit_tag "Sign In" %>
+<%= form_tag "/sessions" do %>
+  <%= label_tag :name %> 
+  <%= text_field_tag :name, @user.name %>
+  <br></br>
+  <%= label_tag :password %>
+  <%= password_field_tag :password %>
+  <br></br>
+  <%= submit_tag "Log In" %>
 <% end %>
+
+<br>
+<h4>Or</h4>
+<%= button_to "Sign in with Google", "/auth/google", method: "get" %>

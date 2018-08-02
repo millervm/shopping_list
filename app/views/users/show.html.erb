@@ -7,13 +7,17 @@
 <% if current_page?(action: 'show_urgent') %>
     <strong><%= pluralize(@user.urgent_list_items.values.flatten.count, 'Urgent Item') %> <%= link_to "(Hide)", user_path(current_user) %></strong>
     <br></br>
-    <% @user.urgent_list_items.each do |list, items| %>
-        <strong><%= list.name %></strong>
-        <ul>
-            <% items.each do |item| %>
-            <li><%= link_to item.name, item_path(item) %></li>
-            <% end %>
-        </ul>
+    <% if @user.urgent_list_items.empty? %>
+        (None)<br>
+    <% else %>
+        <% @user.urgent_list_items.each do |list, items| %>
+            <strong><%= list.name %></strong>
+            <ul>
+                <% items.each do |item| %>
+                <li><%= link_to item.name, item_path(item) %></li>
+                <% end %>
+            </ul>
+        <% end %>
     <% end %>
 <% else %>
     <strong><%= pluralize(@user.urgent_list_items.values.flatten.count, 'Urgent Item') %> <%= link_to "(Show)", "/users/#{current_user.id}/show-urgent" %></strong>

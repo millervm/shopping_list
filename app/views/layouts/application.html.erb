@@ -24,13 +24,13 @@
         </ul>
       <% end %>
     </div>
-    <% if !flash.empty? %>
-      <% flash.each do |name, msg| -%>
-          <h3><%= content_tag :div, simple_format(msg), class: name %></h3>
-      <% end %>
-      <hr>
-    <% end %>
     <div id="main">
+      <% if !flash.empty? %>
+        <% flash.each do |name, msg| -%>
+            <h3><%= content_tag :div, simple_format(msg), class: name %></h3>
+        <% end %>
+        <hr>
+      <% end %>
       <%= yield %>
     </div>
   </body>

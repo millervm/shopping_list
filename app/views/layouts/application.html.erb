@@ -10,12 +10,28 @@
   </head>
 
   <body>
+    <div id="header">
+      <span id="site-name">Shopping List</span>
+      <% if logged_in? %>
+        <ul>
+          <li><%= link_to "Welcome, #{current_user.name}", user_path(current_user) %></li>
+          <li><%= link_to "Log Out", "/logout" %></li>
+        </ul>
+      <% else %>
+        <ul>
+          <li><%= link_to "Create Account", new_user_path %></li>
+          <li><%= link_to "Log In", "/login" %></li>
+        </ul>
+      <% end %>
+    </div>
     <% if !flash.empty? %>
       <% flash.each do |name, msg| -%>
-          <h3><%= content_tag :div, simple_format(msg.join("\n")), class: name %></h3>
-      <% end -%>
+          <h3><%= content_tag :div, simple_format(msg), class: name %></h3>
+      <% end %>
       <hr>
     <% end %>
-    <%= yield %>
+    <div id="main">
+      <%= yield %>
+    </div>
   </body>
 </html>

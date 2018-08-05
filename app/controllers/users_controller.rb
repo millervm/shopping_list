@@ -43,10 +43,10 @@ class UsersController < ApplicationController
     
     def update
         @user = User.find_by(id: params[:id])
-        if @user 
-            verify_user(@user)
-            @user.update(user_params)
+        if @user
             if @user.authenticate(params[:user][:current_password])
+                verify_user(@user)
+                @user.update(user_params)
                 if @user.save
                     redirect_to user_path(@user)
                 else

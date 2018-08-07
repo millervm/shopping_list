@@ -47,7 +47,7 @@ class ItemsController < ApplicationController
     end
     
     def update
-        if @item
+        if @item && List.find_by(id: params[:item][:list_id]) && User.find_by(id: params[:item][:user_id])
             verify_user(@item.user)
             @item.update(item_params)
             if @item.save
@@ -57,7 +57,7 @@ class ItemsController < ApplicationController
                 render :edit
             end
         else
-            flash[:notice] = "That is not a valid item."
+            flash[:notice] = "Those are not valid item details."
             redirect_to user_lists_path(current_user)
         end
     end

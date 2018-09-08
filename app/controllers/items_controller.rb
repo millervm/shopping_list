@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
     def new
         if params[:list_id]
             list = List.find_by(id: params[:list_id])
-            if list
+            if list 
                 verify_user(list.user)
                 @item = Item.new(list_id: list.id)
             else
@@ -19,17 +19,21 @@ class ItemsController < ApplicationController
     
     def create
         @item = Item.new(item_params)
-        verify_user(@item.user)
-        if @item.save
-            redirect_to item_path(@item)
+        if @item && current_user.id == params[:item][:user_id].to_i && current_user.lists.ids.include?(params[:item][:list_id].to_i)
+            if @item.save
+                redirect_to item_path(@item)
+            else
+                flash[:notice] = @item.errors.messages.values.flatten.join("\n")
+                render :new
+            end
         else
-            flash[:notice] = @item.errors.messages.values.flatten.join("\n")
-            render :new
+            flash[:notice] = "Those are not valid item details. Select a list to add a new item."
+            redirect_to user_lists_path(current_user)
         end
     end
     
     def show
-        if @item
+        if @item 
             verify_user(@item.user)
         else
             flash[:notice] = "That is not a valid page."
@@ -38,7 +42,7 @@ class ItemsController < ApplicationController
     end
     
     def edit
-        if @item
+        if @item 
             verify_user(@item.user)
         else
             flash[:notice] = "That is not a valid item."
@@ -47,10 +51,14 @@ class ItemsController < ApplicationController
     end
     
     def update
-        if @item && List.find_by(id: params[:item][:list_id]) && User.find_by(id: params[:item][:user_id])
-            verify_user(@item.user)
-            @item.update(item_params)
-            if @item.save
+        if @item
+            if params[:item][:list_id] && params[:item][:user_id]
+                if @item.list.id != params[:item][:list_id].to_i || @item.user.id != params[:item][:user_id].to_i
+                    flash[:notice] = "Those are not the correct item details."
+                    return render :edit
+                end
+            end
+            if @item.update(item_params)
                 redirect_to item_path(@item)
             else
                 flash[:notice] = @item.errors.messages.values.flatten.join("\n")

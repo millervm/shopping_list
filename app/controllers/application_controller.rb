@@ -27,7 +27,8 @@ class ApplicationController < ActionController::Base
         def verify_user(user)
             if user != current_user   
                 flash[:notice] = "You do not have access to that page."
-                redirect_to user_path(user)
+                redirect_to user_path(current_user)
+                return
             end
         end
         

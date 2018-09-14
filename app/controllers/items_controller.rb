@@ -1,25 +1,26 @@
 class ItemsController < ApplicationController
     before_action :set_item, except: [:new, :create]
-    
+
     def new
+        @item = Item.new
         if params[:list_id]
             list = List.find_by(id: params[:list_id])
             if list 
                 verify_user(list.user)
-                @item = Item.new(list_id: list.id)
+                @item.list = list
             else
-                flash[:notice] = "That is not a valid list."
+                flash[:notice] = "That is not a valid page."
                 redirect_to user_lists_path(current_user)
             end
-        else
-            flash[:notice] = "You must select a list to add an item."
-            redirect_to user_lists_path(current_user)
         end
     end
     
     def create
         @item = Item.new(item_params)
-        if @item && current_user.id == params[:item][:user_id].to_i && current_user.lists.ids.include?(params[:item][:list_id].to_i)
+        if @item 
+            if @item.user
+                verify_user(@item.user) and return
+            end
             if @item.save
                 redirect_to item_path(@item)
             else
@@ -27,8 +28,8 @@ class ItemsController < ApplicationController
                 render :new
             end
         else
-            flash[:notice] = "Those are not valid item details. Select a list to add a new item."
-            redirect_to user_lists_path(current_user)
+            flash[:notice] = "Those are not valid item details. Please try again."
+            redirect_to new_item_path
         end
     end
     
@@ -52,11 +53,8 @@ class ItemsController < ApplicationController
     
     def update
         if @item
-            if params[:item][:list_id] && params[:item][:user_id]
-                if @item.list.id != params[:item][:list_id].to_i || @item.user.id != params[:item][:user_id].to_i
-                    flash[:notice] = "Those are not the correct item details."
-                    return render :edit
-                end
+            if User.find_by(id: params[:item][:user_id])
+                verify_user(User.find_by(id: params[:item][:user_id])) and return
             end
             if @item.update(item_params)
                 redirect_to item_path(@item)

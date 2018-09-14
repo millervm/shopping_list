@@ -1,11 +1,15 @@
 <h1><%= current_user.name %>'s Lists</h1>
 
-<ul>
-    <% @lists.each do |list| %>
-        <li><%= link_to list.name, list_path(list) %> &nbsp;&nbsp;&nbsp; (<%= pluralize(list.incomplete_items.count, 'item') %> pending)</li>
-        </li>
-    <% end %>
-</ul>
+<% if current_user.lists.empty? %>
+    (No lists)<br>
+<% else %>
+    <ul>
+        <% @lists.each do |list| %>
+            <li><%= link_to list.name, list_path(list) %> &nbsp;&nbsp;&nbsp; (<%= pluralize(list.incomplete_items.count, 'item') %> pending)</li>
+            </li>
+        <% end %>
+    </ul>
+<% end %>
 
 <br>
 <% if current_page?(action: 'show_urgent') %>
@@ -22,6 +26,7 @@
                     <li><%= link_to item.name, item_path(item) %></li>
                     <% end %>
                 </ul>
+                <br>
             <% end %>
         <% end %>
     <% end %>
@@ -29,5 +34,6 @@
     <%= link_to "Show Urgent Items", "/users/#{current_user.id}/lists/show-urgent" %>
 <% end %>
 <br></br>
-<br></br>
 <%= link_to "Create New List", new_user_list_path(current_user) %>
+<br></br>
+<%= link_to "Add New Item", new_item_path %>

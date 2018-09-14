@@ -1,5 +1,7 @@
-<h1>Edit Item Form</h1>
+<h1>Edit Item</h1>
 
 <%= render 'form' %>
 <br></br>
-<%= link_to "Back to Item", item_path(@item) %>
+<%= button_to "Delete Item", "/items/#{@item.id}", method: :delete, data: { confirm: 'Are you sure you want to delete this item?' } %>
+<br></br>
+<%= link_to "Cancel", item_path(@item) %>

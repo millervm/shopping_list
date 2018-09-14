@@ -14,7 +14,7 @@ No pending items.
 
 <br></br>
 <% if current_page?(action: 'show_complete') %>
-    <strong>Completed Items:</strong>
+    <strong>Completed Items </strong><%= link_to "(Hide)", list_path(@list) %>
     <br></br>
     <% if !@list.complete_items.empty? %>
         <ul>
@@ -27,8 +27,6 @@ No pending items.
     <% else %>
         (None)
     <% end %>
-    <br></br>
-    <%= link_to "Hide Completed Items", list_path(@list) %>
 <% else %>
     <%= link_to "Show Completed Items", "/lists/#{@list.id}/show-complete" %>
 <% end %>

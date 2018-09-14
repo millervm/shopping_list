@@ -12,7 +12,6 @@ class User < ApplicationRecord
                         length: {in: 6..50, message: "Your password must have 6-40 characters."},
                         if: :password
     
-    
     def urgent_list_items
         urgent = {}
         self.lists.each do |list|

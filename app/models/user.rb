@@ -10,7 +10,11 @@ class User < ApplicationRecord
                     length: {maximum: 50, message: "Your name must have less than 50 characters."}
     validates :password, presence: {message: "You must enter a password."},
                         length: {in: 6..50, message: "Your password must have 6-40 characters."},
-                        if: :password
+                        on: :create
+    validates :password, presence: {message: "You must enter a password."},
+                        length: {in: 6..50, message: "Your password must have 6-40 characters."},
+                        on: :update, if: :password_digest_changed?
+                        
     
     def urgent_list_items
         urgent = {}

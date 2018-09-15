@@ -46,8 +46,7 @@ class UsersController < ApplicationController
         if @user
             if @user.authenticate(params[:user][:current_password])
                 verify_user(@user)
-                @user.update(user_params)
-                if @user.save
+                if @user.update(user_params)
                     redirect_to user_path(@user)
                 else
                     flash[:notice] = @user.errors.messages.values.flatten.join("\n")

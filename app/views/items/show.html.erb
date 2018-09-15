@@ -1,4 +1,8 @@
-<h1><%= @item.name %></h1>
+<% if @item.complete%>
+    <h1 id="completed"><%= @item.name %></h1>
+<% else %>
+    <h1><%= @item.name %></h1>
+<% end %>
 
 <h3><%= "COMPLETE" if @item.complete %></h3>
 <h4><%= "URGENT" if @item.urgent %></h4>
@@ -9,7 +13,6 @@
 <%= @item.description %>
 <br></br>
 <br></br>
-<%#<%= button_to "Mark as Completed", "/items/#{@item.id}/mark-complete" %> 
 <%= form_for @item do |f| %>
     <%= f.check_box :complete %>
     <%= f.label "Mark as Complete" %>

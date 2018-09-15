@@ -20,7 +20,6 @@ Rails.application.routes.draw do
   get '/users/:id/show-urgent', to: 'users#show_urgent'
   
   get '/auth/:provider/callback', to: 'sessions#create'
-  #get '/auth/:provider/callback', to: redirect('/')
   get '/auth/failure', to: redirect('/login')
   
   root 'application#home'

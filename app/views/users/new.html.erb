@@ -1,4 +1,4 @@
-<h1>Signup Form</h1>
+<h1>Create Account</h1>
 
 <%= form_for @user do |f| %>
     <%= f.label "Username" %>
@@ -9,3 +9,7 @@
     <br></br>
     <%= f.submit "Create Account" %>
 <% end %>
+
+<br>
+<h4>Or</h4>
+<%= button_to "Sign in with Google", "/auth/google", method: "get" %>

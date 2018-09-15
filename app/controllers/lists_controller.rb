@@ -66,8 +66,7 @@ class ListsController < ApplicationController
     end
     
     def update
-        if @list 
-            #&& current_user.id == params[:list][:user_id].to_i
+        if @list
             if User.find_by(id: params[:list][:user_id].to_i)
                 verify_user(User.find_by(id: params[:list][:user_id].to_i)) and return
             end

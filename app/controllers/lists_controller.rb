@@ -1,5 +1,5 @@
 class ListsController < ApplicationController
-    before_action :set_list, except: [:new, :create, :index, :show_urgent]
+    before_action :set_list, except: [:new, :create, :index]
     
     def new
         @list = List.new
@@ -43,16 +43,16 @@ class ListsController < ApplicationController
     
     def index
         if params[:user_id]
-            user = User.find_by(id: params[:user_id])
-            if user
-                verify_user(user)
-                @lists = user.lists
+            @user = User.find_by(id: params[:user_id])
+            if @user
+                verify_user(@user)
+                @lists = @user.lists
             else
                 flash[:notice] = "That is not a valid page."
                 redirect_to user_lists_path(current_user)
             end
         else
-            @lists = current_user.lists
+            flash[:notice] = "That is not a valid page."
         end
     end
     
@@ -94,32 +94,6 @@ class ListsController < ApplicationController
             redirect_to user_lists_path(current_user)
         else
             flash[:notice] = "That is not a valid page."
-        end
-    end
-    
-    def show_complete
-        if @list
-            verify_user(@list.user)
-            render :show
-        else
-            flash[:notice] = "That is not a valid page."
-            redirect_to user_lists_path(current_user)
-        end
-    end
-        
-    def show_urgent
-        if params[:user_id]
-            user = User.find_by(id: params[:user_id])
-            if user
-                verify_user(user)
-                @lists = user.lists
-                render :index
-            else
-                flash[:notice] = "That is not a valid page."
-                redirect_to user_lists_path(current_user)
-            end
-        else
-            @lists = current_user.lists
         end
     end
 

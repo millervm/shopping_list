@@ -15,9 +15,9 @@ Rails.application.routes.draw do
   post '/sessions', to: 'sessions#create'
   get '/logout', to: 'sessions#destroy'
   
-  get '/lists/:id/show-complete', to: 'lists#show_complete'
-  get '/users/:user_id/lists/show-urgent', to: 'lists#show_urgent'
-  get '/users/:id/show-urgent', to: 'users#show_urgent'
+  get '/lists/:id/show-complete', to: 'lists#show'
+  get '/users/:user_id/lists/show-urgent', to: 'lists#index'
+  get '/users/:id/show-urgent', to: 'users#show'
   
   get '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/failure', to: redirect('/login')

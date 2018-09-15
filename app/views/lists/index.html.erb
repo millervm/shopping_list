@@ -1,6 +1,6 @@
-<h1><%= current_user.name %>'s Lists</h1>
+<h1><%= @user.name %>'s Lists</h1>
 
-<% if current_user.lists.empty? %>
+<% if @user.lists.empty? %>
     (No lists)<br>
 <% else %>
     <ul>
@@ -12,8 +12,8 @@
 <% end %>
 
 <br>
-<% if current_page?(action: 'show_urgent') %>
-    <strong>Urgent Items</strong> <%= link_to "(Hide)", user_lists_path(current_user) %>
+<% if current_page?("/users/#{@user.id}/lists/show-urgent") %>
+    <strong>Urgent Items</strong> <%= link_to "(Hide)", user_lists_path(@user) %>
     <br></br>
     <% if @lists.all? {|list| list.urgent_items.empty?} %> 
         (None)        
@@ -26,14 +26,13 @@
                     <li><%= link_to item.name, item_path(item) %></li>
                     <% end %>
                 </ul>
-                <br>
             <% end %>
         <% end %>
     <% end %>
 <% else %>
-    <%= link_to "Show Urgent Items", "/users/#{current_user.id}/lists/show-urgent" %>
+    <%= link_to "Show Urgent Items", "/users/#{@user.id}/lists/show-urgent" %>
 <% end %>
 <br></br>
-<%= link_to "Create New List", new_user_list_path(current_user) %>
+<%= link_to "Create New List", new_user_list_path(@user) %>
 <br></br>
 <%= link_to "Add New Item", new_item_path %>

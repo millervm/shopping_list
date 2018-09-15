@@ -2,10 +2,9 @@
 
 <br>
 <strong><%= pluralize(@user.lists.count, 'List') %> <%= link_to "(View)", user_lists_path(@user) %></strong>
-<br>
-<br>
-<% if current_page?(action: 'show_urgent') %>
-    <strong><%= pluralize(@user.urgent_list_items.values.flatten.count, 'Urgent Item') %> <%= link_to "(Hide)", user_path(current_user) %></strong>
+<br></br>
+<% if current_page?("/users/#{@user.id}/show-urgent") %>
+    <strong><%= pluralize(@user.urgent_list_items.values.flatten.count, 'Urgent Item') %> <%= link_to "(Hide)", user_path(@user) %></strong>
     <br></br>
     <% if @user.urgent_list_items.empty? %>
         (None)<br>
@@ -20,7 +19,7 @@
         <% end %>
     <% end %>
 <% else %>
-    <strong><%= pluralize(@user.urgent_list_items.values.flatten.count, 'Urgent Item') %> <%= link_to "(Show)", "/users/#{current_user.id}/show-urgent" %></strong>
+    <strong><%= pluralize(@user.urgent_list_items.values.flatten.count, 'Urgent Item') %> <%= link_to "(Show)", "/users/#{@user.id}/show-urgent" %></strong>
 <% end %>
 <br></br>
 <br>

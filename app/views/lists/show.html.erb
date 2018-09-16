@@ -1,5 +1,8 @@
 <h1><%= @list.name %></h1>
 
+<h4><%= "ACTIVE" if @list.active %></h4>
+<h4><%= "NOT ACTIVE" if !@list.active %></h4>
+
 <% if !@list.items.incomplete.empty? %>
 <ul>
     <% @list.items.incomplete.each do |item| %>
@@ -10,7 +13,7 @@
 </ul>
 <% else %>
 No pending items.
-<% end %>
+<% end %><br>
 
 <br></br>
 <% if current_page?("/lists/#{@list.id}/show-complete") %>
@@ -33,6 +36,7 @@ No pending items.
     <%= link_to "Show Completed Items", "/lists/#{@list.id}/show-complete" %>
 <% end %>
 <br></br>
+
 <%= link_to "Add New Item", new_list_item_path(@list) %>
 <br></br>
 <%= link_to "Edit List", edit_list_path(@list) %>

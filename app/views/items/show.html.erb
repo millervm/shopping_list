@@ -4,7 +4,7 @@
     <h1><%= @item.name %></h1>
 <% end %>
 
-<h3><%= "COMPLETE" if @item.complete %></h3>
+<h4><%= "COMPLETE" if @item.complete %></h4>
 <h4><%= "URGENT" if @item.urgent %></h4>
 
 <h4>List: <%= link_to @item.list.name, list_path(@item.list) %></h4>

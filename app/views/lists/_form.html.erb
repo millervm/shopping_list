@@ -1,7 +1,10 @@
 <%= form_for @list do |f| %>
     <%= f.hidden_field :user_id, value: current_user.id %>
     <%= f.label :name %>
-    <%= f.text_field :name %>
+    <%= f.text_field :name %> 
+    <br></br>
+    <%= f.label "Active" %>
+    <%= f.check_box :active %>
     <br></br>
     <%= f.submit  %>
 <% end %>

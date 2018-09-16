@@ -1,15 +1,16 @@
 <h1><%= @user.name %></h1>
 
 <br>
-<strong><%= pluralize(@user.lists.count, 'List') %></strong> <%= link_to "(View)", user_lists_path(@user) %>
+<strong><%= pluralize(@user.lists.active.count, 'Active List') %></strong> <%= link_to "(View)", user_lists_path(@user) %>
 <br></br>
+
 <% if current_page?("/users/#{@user.id}/show-urgent") %>
-    <strong><%= pluralize(@user.items.incomplete.urgent.count, 'Urgent Item') %></strong> <%= link_to "(Hide)", user_path(@user) %>
+    <strong><%= pluralize(@user.items.incomplete.urgent.select {|item| item.list.active}.count, 'Urgent Item') %></strong> <%= link_to "(Hide)", user_path(@user) %>
     <br></br>
-    <% if @user.items.incomplete.urgent.empty? %>
+    <% if @user.items.incomplete.urgent.select {|item| item.list.active}.empty? %>
         (None)<br>
     <% else %>
-        <% @user.lists.each do |list| %>
+        <% @user.lists.active.each do |list| %>
             <% if !list.items.incomplete.urgent.empty? %>
                 <strong><%= list.name %></strong>
                 <ul>
@@ -21,8 +22,8 @@
         <% end %>
     <% end %>
 <% else %>
-    <strong><%= pluralize(@user.items.incomplete.urgent.count, 'Urgent Item') %></strong> <%= link_to "(Show)", "/users/#{@user.id}/show-urgent" %>
-<% end %>
+    <strong><%= pluralize(@user.items.incomplete.urgent.select {|item| item.list.active}.count, 'Urgent Item') %></strong> <%= link_to "(Show)", "/users/#{@user.id}/show-urgent" %>
+<% end %><br>
 <br></br>
-<br>
+
 <%= link_to "Edit Account Details", edit_user_path(@user) %>

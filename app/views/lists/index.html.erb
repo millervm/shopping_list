@@ -1,10 +1,10 @@
 <h1><%= @user.name %>'s Lists</h1>
 
-<% if @user.lists.empty? %>
-    (None)<br>
+<% if @user.lists.active.empty? %>
+    (No active lists)<br>
 <% else %>
     <ul>
-        <% @lists.each do |list| %>
+        <% @lists.active.each do |list| %>
             <li><%= link_to list.name, list_path(list) %> &nbsp;&nbsp;&nbsp; (<%= pluralize(list.items.incomplete.count, 'item') %> pending)</li>
             </li>
         <% end %>
@@ -12,13 +12,31 @@
 <% end %>
 
 <br>
+<% if current_page?("/users/#{@user.id}/lists/show-inactive") %>
+    <strong>Inactive Lists</strong> <%= link_to "(Hide)", user_lists_path(@user) %>
+    <br>
+    <% if @lists.inactive.empty? %>
+        (None)        
+    <% else %>
+        <ul>
+        <% @lists.inactive.each do |list| %>
+            <li><%= link_to list.name, list_path(list) %> &nbsp;&nbsp;&nbsp; (<%= pluralize(list.items.incomplete.count, 'item') %> pending)</li>
+            </li>
+        <% end %>
+        </ul>
+    <% end %>
+<% else %>
+    <%= link_to "Show Inactive Lists", "/users/#{@user.id}/lists/show-inactive" %>
+<% end %>
+<br></br>
+
 <% if current_page?("/users/#{@user.id}/lists/show-urgent") %>
     <strong>Urgent Items</strong> <%= link_to "(Hide)", user_lists_path(@user) %>
     <br></br>
-    <% if @lists.all? {|list| list.items.incomplete.urgent.empty?} %> 
+    <% if @lists.active.all? {|list| list.items.incomplete.urgent.empty?} %> 
         (None)        
     <% else %>
-        <% @lists.each do |list| %>
+        <% @lists.active.each do |list| %>
             <% if !list.items.incomplete.urgent.empty? %>
                 <strong><%= list.name %></strong><br>
                 <ul>
@@ -33,6 +51,7 @@
     <%= link_to "Show Urgent Items", "/users/#{@user.id}/lists/show-urgent" %>
 <% end %>
 <br></br>
+
 <%= link_to "Create New List", new_user_list_path(@user) %>
 <br></br>
 <%= link_to "Add New Item", new_item_path %>

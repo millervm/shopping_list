@@ -7,4 +7,20 @@ class Item < ApplicationRecord
     validates :list_id, presence: {message: "List must be specified."}
     validates :user_id, presence: {message: "User must be specified."}
     
+    def self.complete
+        where(complete: true)
+    end
+    
+    def self.incomplete
+        where(complete: false)
+    end
+    
+    def self.urgent
+        where(urgent: true)
+    end
+    
+    def self.not_urgent
+        where(urgent: false)
+    end
+    
 end

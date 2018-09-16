@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   
   get '/lists/:id/show-complete', to: 'lists#show'
   get '/users/:user_id/lists/show-urgent', to: 'lists#index'
+  get '/users/:user_id/lists/show-inactive', to: 'lists#index'
   get '/users/:id/show-urgent', to: 'users#show'
   
   get '/auth/:provider/callback', to: 'sessions#create'

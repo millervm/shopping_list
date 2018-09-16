@@ -14,15 +14,6 @@ class User < ApplicationRecord
     validates :password, presence: {message: "You must enter a password."},
                         length: {in: 6..50, message: "Your password must have 6-40 characters."},
                         on: :update, if: :password_digest_changed?
-                        
-    
-    def urgent_list_items
-        urgent = {}
-        self.lists.each do |list|
-            urgent[list] = list.urgent_items.collect {|item| item} if !list.urgent_items.empty?
-        end
-        urgent
-    end
     
     def self.from_omniauth(auth)
         user = find_or_create_by(uid: auth.uid, provider: auth.provider)

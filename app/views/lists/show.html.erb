@@ -1,8 +1,8 @@
 <h1><%= @list.name %></h1>
 
-<% if !@list.incomplete_items.empty? %>
+<% if !@list.items.incomplete.empty? %>
 <ul>
-    <% @list.incomplete_items.each do |item| %>
+    <% @list.items.incomplete.each do |item| %>
         <li>
             <%= link_to item.name, item_path(item) %> &nbsp;&nbsp;&nbsp; <%= "(URGENT)" if item.urgent %>
         </li>
@@ -16,9 +16,9 @@ No pending items.
 <% if current_page?("/lists/#{@list.id}/show-complete") %>
     <strong>Completed Items </strong><%= link_to "(Hide)", list_path(@list) %>
     <br>
-    <% if !@list.complete_items.empty? %>
+    <% if !@list.items.complete.empty? %>
         <ul>
-            <% @list.complete_items.each do |item| %>
+            <% @list.items.complete.each do |item| %>
             <li>
                 <%= link_to item.name, item_path(item) %>
             </li>

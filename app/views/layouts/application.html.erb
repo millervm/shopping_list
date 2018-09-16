@@ -11,7 +11,7 @@
 
   <body>
     <div id="header">
-      <span id="site-name">Shopping List</span>
+      <span id="site-name"><%= link_to "Shopping List", root_path %></span>
       <% if logged_in? %>
         <ul>
           <li><%= link_to "Welcome, #{current_user.name}!", user_path(current_user) %></li>

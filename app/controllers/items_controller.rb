@@ -21,6 +21,9 @@ class ItemsController < ApplicationController
             if @item.user
                 verify_user(@item.user) and return
             end
+            if @item.list.user
+                verify_user(@item.list.user) and return
+            end
             if @item.save
                 redirect_to item_path(@item)
             else
@@ -55,6 +58,9 @@ class ItemsController < ApplicationController
         if @item
             if User.find_by(id: params[:item][:user_id])
                 verify_user(User.find_by(id: params[:item][:user_id])) and return
+            end
+            if List.find_by(id: params[:item][:list_id])
+                verify_user(List.find_by(id: params[:item][:list_id])) and return
             end
             if @item.update(item_params)
                 redirect_to item_path(@item)

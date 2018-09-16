@@ -21,7 +21,7 @@ class ItemsController < ApplicationController
             if @item.user
                 verify_user(@item.user) and return
             end
-            if @item.list.user
+            if @item.list && @item.list.user
                 verify_user(@item.list.user) and return
             end
             if @item.save

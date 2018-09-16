@@ -1,7 +1,7 @@
 <h1><%= @user.name %>'s Lists</h1>
 
 <% if @user.lists.empty? %>
-    (No lists)<br>
+    (None)<br>
 <% else %>
     <ul>
         <% @lists.each do |list| %>

@@ -56,11 +56,11 @@ class ItemsController < ApplicationController
     
     def update
         if @item
-            if User.find_by(id: params[:item][:user_id])
-                verify_user(User.find_by(id: params[:item][:user_id])) and return
+            if User.find_by(id: params[:item][:user_id].to_i)
+                verify_user(User.find_by(id: params[:item][:user_id].to_i)) and return
             end
-            if List.find_by(id: params[:item][:list_id])
-                verify_user(List.find_by(id: params[:item][:list_id])) and return
+            if List.find_by(id: params[:item][:list_id].to_i)
+                verify_user(List.find_by(id: params[:item][:list_id].to_i).user) and return
             end
             if @item.update(item_params)
                 redirect_to item_path(@item)

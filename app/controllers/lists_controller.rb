@@ -97,6 +97,10 @@ class ListsController < ApplicationController
         end
     end
 
+    def sort_by_name
+       @lists = List.sort_by_name
+    end
+    
     private
     
         def list_params

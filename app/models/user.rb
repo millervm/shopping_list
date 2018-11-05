@@ -2,6 +2,7 @@ class User < ApplicationRecord
     has_secure_password(validations: false)
     has_many :lists
     has_many :items, through: :lists
+    has_many :tags, through: :items
     
     before_save {self.name = name.downcase}
     

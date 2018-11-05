@@ -1,6 +1,7 @@
 class Item < ApplicationRecord
     belongs_to :list, optional: true
     belongs_to :user, optional: true
+    has_and_belongs_to_many :tags
     
     validates :name, presence: {message: "Item must have a name."}
     validates :description, length: {maximum: 500, message: "Your description must have less than 500 characters."}

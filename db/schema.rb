@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_16_194858) do
+ActiveRecord::Schema.define(version: 2018_10_20_214228) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
@@ -23,9 +23,23 @@ ActiveRecord::Schema.define(version: 2018_06_16_194858) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "items_tags", id: false, force: :cascade do |t|
+    t.integer "item_id"
+    t.integer "tag_id"
+    t.index ["item_id"], name: "index_items_tags_on_item_id"
+    t.index ["tag_id"], name: "index_items_tags_on_tag_id"
+  end
+
   create_table "lists", force: :cascade do |t|
     t.string "name"
     t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -35,6 +49,8 @@ ActiveRecord::Schema.define(version: 2018_06_16_194858) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "uid"
+    t.string "provider"
   end
 
 end

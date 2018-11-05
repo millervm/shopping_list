@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   post '/sessions', to: 'sessions#create'
   get '/logout', to: 'sessions#destroy'
   
+  get '/items/:id/add-tag', to: 'items#add_tag'
+  get '/items/:id/remove-tags', to: 'items#remove_tags'
   get '/lists/:id/show-complete', to: 'lists#show'
   get '/users/:user_id/lists/show-urgent', to: 'lists#index'
   get '/users/:user_id/lists/show-inactive', to: 'lists#index'

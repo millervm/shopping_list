@@ -1,6 +1,7 @@
 class List < ApplicationRecord
     belongs_to :user, optional: true
     has_many :items
+    has_many :tags, through: :items
     
     validates :name, presence: {message: "List must have a name."},
                      uniqueness: {scope: :user_id, case_sensitive: false, message: "You cannot have two lists with the same name."}

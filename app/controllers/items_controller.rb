@@ -85,10 +85,41 @@ class ItemsController < ApplicationController
         end
     end
     
+    def add_tag
+        tag = Tag.case_insensitive_find_or_create_by_name(params[:tag][:name])
+        if @item
+            verify_user(@item.user)
+            if !tag.save
+                flash[:notice] = tag.errors.messages.values.flatten.join("\n")
+            elsif @item.tags.include?(tag)
+                flash[:notice] = "Item already has that tag."
+            else
+                @item.tags << tag
+            end
+            redirect_to item_path(@item)
+        else
+            flash[:notice] = "That is not a valid page."
+            redirect_to user_lists_path(current_user)
+        end
+    end
+    
+    def remove_tags
+        if @item
+            @item.tag_ids = params[:item][:tag_ids].collect {|id| id.to_i}.select {|tag| Tag.find_by(id: tag) && @item.tag_ids.include?(tag)}.uniq
+            if !@item.save
+                flash[:notice] = "Those are not valid item details."
+            end
+            redirect_to item_path(@item)
+        else
+            flash[:notice] = "That is not a valid page."
+            redirect_to user_lists_path(current_user)
+        end
+    end
+    
     private
     
         def item_params
-            params.require(:item).permit(:name, :description, :urgent, :complete, :list_id, :user_id)
+            params.require(:item).permit(:name, :description, :urgent, :complete, :list_id, :user_id, tag_ids: [])
         end
         
         def set_item

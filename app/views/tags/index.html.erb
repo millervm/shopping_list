@@ -1,0 +1,15 @@
+<h1>Tags</h1>
+
+<em>Listed alphabetically, with your current usage noted.</em>
+<br></br>
+
+<% @tags.sort_by_name.each do |tag| %>
+    <% if current_user.tags.include?(tag) %>
+        <%= link_to tag.name, tag_path(tag) %> &nbsp;&nbsp;&nbsp; (<%= pluralize(tag.lists.active.uniq.select{|list| list.user == current_user}.count, 'active list')%>, <%= pluralize(tag.items.incomplete.select{|item| item.user == current_user}.count, 'pending item')%>)<br>
+        <!--%= pluralize(current_user.lists.active.select {|list| list.items.incomplete.select {|item| item.tags.include?(tag)}}.count, 'Pending item') %-->
+    <% else %>
+        <%= link_to tag.name, tag_path(tag) %><br>
+    <% end %>
+<% end %>
+<br></br>
+<%= link_to "My Lists", user_lists_path(current_user) %>

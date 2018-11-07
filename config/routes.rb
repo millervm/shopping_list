@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   
   resources :items, only: [:new, :create, :show, :edit, :update, :destroy]
   
+  resources :tags, only: [:show, :index]
+  
   get '/login', to: 'sessions#new'
   post '/sessions', to: 'sessions#create'
   get '/logout', to: 'sessions#destroy'
@@ -23,6 +25,7 @@ Rails.application.routes.draw do
   get '/users/:user_id/lists/show-urgent', to: 'lists#index'
   get '/users/:user_id/lists/show-inactive', to: 'lists#index'
   get '/users/:id/show-urgent', to: 'users#show'
+  get '/tags/:id/show-inactive-lists', to: 'tags#show'
   
   get '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/failure', to: redirect('/login')

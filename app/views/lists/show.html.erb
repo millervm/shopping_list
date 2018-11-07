@@ -36,7 +36,12 @@ No pending items.
     <%= link_to "Show Completed Items", "/lists/#{@list.id}/show-complete" %>
 <% end %>
 <br></br>
-
+<h4>Tags for pending items:</h4>
+<% @list.items.incomplete.collect {|item| item.tags}.flatten.uniq.each do |tag| %>
+    &nbsp;&nbsp;&nbsp;&nbsp;<%= link_to tag.name, tag_path(tag) %>
+<% end %>
+<br></br>
+<br></br>
 <%= link_to "Add New Item", new_list_item_path(@list) %>
 <br></br>
 <%= link_to "Edit List", edit_list_path(@list) %>

@@ -1,4 +1,4 @@
-<% if @item.complete%>
+<% if @item.complete %>
     <h1 id="completed"><%= @item.name %></h1>
 <% else %>
     <h1><%= @item.name %></h1>
@@ -10,14 +10,38 @@
 <h4>List: <%= link_to @item.list.name, list_path(@item.list) %></h4>
 
 <h4>Description/notes:</h4>
-<%= @item.description %>
+<% if @item.description.blank? %>
+    (None)
+<% else %>
+    <%= @item.description %>
+<% end %>
 <br></br>
+
+<h4>Tags:</h4>
+<% if @item.tags.empty? %>
+    (None)
+<% else %>
+    <%= form_tag "/items/#{@item.id}/remove-tags", method: :get do %>
+        <%= hidden_field_tag "item[tag_ids][]", 0 %>
+        <% @item.tags.each do |tag| %>
+            <%= check_box_tag "item[tag_ids][]", tag.id, tag.id %>
+            <%= label_tag tag.name, "#{tag.name}" %><br>
+        <% end %><br>
+        <%= submit_tag "Remove unchecked tags" %>
+    <% end %>
+<% end %>
+<br></br>
+<%= form_tag "/items/#{@item.id}/add-tag", method: :get do %>
+    <%= label_tag "Add tag:" %>
+    <%= text_field_tag "tag[name]" %>
+    <%= submit_tag "Add" %>
+<% end %>
+
 <br></br>
 <%= form_for @item do |f| %>
     <%= f.check_box :complete %>
-    <%= f.label "Mark as Complete" %>
+    <%= f.label "Mark Item as Complete" %>
     <%= f.submit %>
 <% end %>
 <br></br>
 <%= link_to "Edit Item", edit_item_path(@item) %>
-

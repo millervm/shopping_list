@@ -1,0 +1,42 @@
+<h1><%= @tag.name %></h1>
+
+<% if !current_user.tags.include?(@tag) %>
+    This tag isn't being used for any of your items.
+    <br>
+<% else %>
+    <h4>Active lists tagged:</h4>
+    <% current_user.lists.active.select {|list| list.tags.include?(@tag)}.each do |list| %>
+	    <strong><%= link_to list.name, list_path(list) %></strong>
+    	<ul>
+    		<% list.items.incomplete.select {|item| item.tags.include?(@tag)}.each do |item| %>
+    			<li><%= item.name %></li>
+    		<% end %>
+    	</ul>
+    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Plus <%= pluralize list.items.complete.select {|item| item.tags.include?(@tag)}.count, 'completed item' %>) 
+    	<br></br>
+    <% end %>
+<% end %>
+<br>
+<% if current_page?("/tags/#{@tag.id}/show-inactive-lists") %>
+    <strong>Inactive Lists </strong><%= link_to "(Hide)", tag_path(@tag) %>
+    <br><br>
+    <% if !current_user.lists.inactive.select {|list| list.tags.include?(@tag)}.empty? %>
+        <% current_user.lists.inactive.select {|list| list.tags.include?(@tag)}.each do |list| %>
+            <strong><%= link_to list.name, list_path(list) %></strong>
+            <ul>
+        		<% list.items.incomplete.select {|item| item.tags.include?(@tag)}.each do |item| %>
+        			<li><%= item.name %></li>
+        		<% end %>
+        	</ul>
+        	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Plus <%= pluralize list.items.complete.select {|item| item.tags.include?(@tag)}.count, 'completed item' %>)
+        	<br>
+        <% end %>
+    <% else %>
+        (None)
+        <br>
+    <% end %>
+<% else %>
+    <%= link_to "Show Inactive Lists", "/tags/#{@tag.id}/show-inactive-lists" %>
+<% end %>
+<br></br>
+<%= link_to "Back to Tags", tags_path %>

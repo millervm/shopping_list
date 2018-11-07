@@ -14,7 +14,7 @@
 <br>
 <% if current_page?("/users/#{@user.id}/lists/show-inactive") %>
     <strong>Inactive Lists</strong> <%= link_to "(Hide)", user_lists_path(@user) %>
-    <br>
+    <br></br>
     <% if @lists.inactive.empty? %>
         (None)        
     <% else %>
@@ -33,9 +33,10 @@
 <% if current_page?("/users/#{@user.id}/lists/show-urgent") %>
     <strong>Urgent Items</strong> <%= link_to "(Hide)", user_lists_path(@user) %>
     <br></br>
-    <% if @lists.active.all? {|list| list.items.incomplete.urgent.empty?} %> 
+    <% if @lists.active.all? {|list| list.items.incomplete.urgent.empty?} %>
         (None)        
     <% else %>
+        <br>
         <% @lists.active.each do |list| %>
             <% if !list.items.incomplete.urgent.empty? %>
                 <strong><%= list.name %></strong><br>
@@ -55,3 +56,5 @@
 <%= link_to "Create New List", new_user_list_path(@user) %>
 <br></br>
 <%= link_to "Add New Item", new_item_path %>
+<br></br>
+<%= link_to "Tags", tags_path %>

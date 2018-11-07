@@ -18,7 +18,7 @@
 <% end %>
 <br>
 <% if current_page?("/tags/#{@tag.id}/show-inactive-lists") %>
-    <strong>Inactive Lists </strong><%= link_to "(Hide)", tag_path(@tag) %>
+    <strong>Inactive lists tagged: </strong><%= link_to "(Hide)", tag_path(@tag) %>
     <br><br>
     <% if !current_user.lists.inactive.select {|list| list.tags.include?(@tag)}.empty? %>
         <% current_user.lists.inactive.select {|list| list.tags.include?(@tag)}.each do |list| %>
